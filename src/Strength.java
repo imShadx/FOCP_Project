@@ -148,7 +148,7 @@ public class Strength extends JFrame implements ActionListener {
                 Text1.setText("Please Enter a Password");
             } else {
 
-                if (pass.length() > 15 || pass.length() < 5) {
+                if (pass.length() > 25 || pass.length() < 5) {
                     Text1.setText("The password must be between 5 and 15 characters");
                 } else {
                     Pattern upperCase = Pattern.compile("[A-Z]");
@@ -163,8 +163,18 @@ public class Strength extends JFrame implements ActionListener {
                     boolean b = number.find();
                     boolean c = spec.find();
 
-                    if (a && b && c) {
+                    if (a && b && c && pass.length()>=16) {
                         Text1.setText("The password looks strong");
+
+                        Text2a.setForeground(new Color(57,255,20));
+                        Text2a.setText("*uppercase letters");
+
+                        Text2b.setForeground(new Color(57,255,20));
+                        Text2b.setText("*numbers");
+
+                        Text2c.setForeground(new Color(57,255,20));
+                        Text2c.setText("*special characters");
+
                     } else {
                         if ((a && b) || (b && c) || (c && a)) {
                             Text1.setText("The password strength is average");

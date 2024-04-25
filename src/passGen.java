@@ -1,30 +1,83 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.lang.NumberFormatException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class passGen extends JFrame implements ActionListener {
+
+    ImageIcon tickt = new ImageIcon("tick.jpg");
+    Image ticks = tickt.getImage().getScaledInstance(60,60,Image.SCALE_DEFAULT);
+    ImageIcon tick = new ImageIcon(ticks);
+
+    ImageIcon crosst = new ImageIcon("cross.jpg");
+    Image crosss = tickt.getImage().getScaledInstance(60,60,Image.SCALE_DEFAULT);
+    ImageIcon cross = new ImageIcon(crosss);
+
+
+    JCheckBox Upper;
+    JCheckBox Special;
+    JCheckBox Num;
+
     JButton generate;
     JButton Home;
-    JLabel result;
+    JLabel result1;
+
+    JLabel result2;
+
+    JLabel result3;
     String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String lower ="abcdefghijklmnopqrstuvwxyz";
     String num="1234567890";
     String special="<>@#$&*!";
-    String combination = upper+lower+num+special;
+    String characters = lower;
     String Final;
     JTextField in;
+    File file = new File("C:\\Users\\jyath\\Documents\\FOCP FInal Proj.txt");
     passGen(){
+
+
         this.setVisible(true);
-        this.setResizable(false);
+        this.setResizable(true);
         this.setSize(800,800);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.getContentPane().setBackground(Color.BLACK);
 
+        Upper = new JCheckBox("Include Upper Case Characters");
+        Upper.setFont(new Font("Broadway", Font.ITALIC, 20));
+        Upper.setForeground(Color.RED);
+        Upper.setFocusable(false);
+        Upper.setBackground(Color.BLACK);
+        Upper.setBounds(350, 500, 500, 50);
+
+
+
+        Special = new JCheckBox("Include Special Characters");
+        Special.setFont(new Font("Broadway", Font.ITALIC, 20));
+        Special.setFocusable(false);
+        Special.setBackground(Color.BLACK);
+        Special.setForeground(Color.RED);
+        Special.setBounds(350, 560, 500, 50);
+
+        Num = new JCheckBox("Include Numerical Characters");
+        Num.setFont(new Font("Broadway", Font.ITALIC, 20));
+        Num.setFocusable(false);
+        Num.setBackground(Color.BLACK);
+        Num.setForeground(Color.RED);
+        Num.setBounds(350, 620, 500, 50);
+
+
+        this.add(Upper);
+        this.add(Special);
+        this.add(Num);
         JLabel warn = new JLabel();
 
         warn.setText("Please enter the password length*");
@@ -68,8 +121,10 @@ public class passGen extends JFrame implements ActionListener {
         generate.setFocusable(false);
 
         JLabel Header = new JLabel();
-        JLabel fixed  = new JLabel("your password: ");
-        result = new JLabel();
+        JLabel fixed  = new JLabel("your passwords: ");
+        result1 = new JLabel();
+        result2 = new JLabel();
+        result3 = new JLabel();
 
         Header.setText("PASSWORD GENERATOR");
         Header.setHorizontalAlignment(JLabel.CENTER);
@@ -79,13 +134,21 @@ public class passGen extends JFrame implements ActionListener {
 
         fixed.setForeground(new Color(57,255,20));
         fixed.setFont(new Font("Broadway",Font.BOLD,25));
-        fixed.setBounds(10,350,500,500);
+        fixed.setBounds(10,450,500,500);
 
 
 
-        result.setForeground(new Color(57,255,20));
-        result.setFont(new Font("Broadway",Font.BOLD,25));
-        result.setBounds(280,350,700,500);
+        result1.setForeground(new Color(57,255,20));
+        result1.setFont(new Font("Broadway",Font.BOLD,25));
+        result1.setBounds(10,500,700,500);
+
+        result2.setForeground(new Color(57,255,20));
+        result2.setFont(new Font("Broadway",Font.BOLD,25));
+        result2.setBounds(300,500,700,500);
+
+        result3.setForeground(new Color(57,255,20));
+        result3.setFont(new Font("Broadway",Font.BOLD,25));
+        result3.setBounds(600,500,700,500);
 
 
         JPanel header = new JPanel();
@@ -108,17 +171,21 @@ public class passGen extends JFrame implements ActionListener {
         button.add(generate);
         button.setLayout(null);
 
-//        display.setBounds(0, 500, 800, 150);
-//        display.setBackground(Color.BLACK);
-//        display.setLayout(null);
-//        display.add(fixed);
-//        display.add(result);
+        display.setBounds(0, 500, 800, 150);
+        display.setBackground(Color.BLACK);
+        display.setLayout(null);
+        display.add(fixed);
+//        display.add(result1);
+//        display.add(result2);
+//        display.add(result3);
 
         this.add(header);
         this.add(button);
         this.add(display);
         this.add(home);
-        this.add(result);
+        this.add(result1);
+        this.add(result2);
+        this.add(result3);
         this.add(fixed);
 
     }
@@ -135,29 +202,68 @@ public class passGen extends JFrame implements ActionListener {
 
         if(e.getSource()==generate) {
             String n = in.getText();
-            result.setForeground(new Color(57,255,20));
+            result1.setForeground(new Color(57,255,20));
+            result2.setForeground(new Color(57,255,20));
+            result3.setForeground(new Color(57,255,20));
             try {
                 int a = Integer.parseInt(n);
 
+                result1.setText("");
+                result2.setText("");
+                result3.setText("");
+
                 if (a < 5 || a > 15) {
-                    result.setText("length must be between 5 and 15");
+                    result1.setText("length must be between 5 and 15");
                 } else {
-                    char[] password = new char[a];
-
+                    char[] password1 = new char[a];
+                    char[] password2 = new char[a];
+                    char[] password3 = new char[a];
                     Random r = new Random();
+                    Upper.setForeground(Color.RED);
+                    Num.setForeground(Color.RED);
+                    Special.setForeground(Color.RED);
+                    characters = lower;
 
-                    for (int i = 0; i < a; i++) {
-                        password[i] = combination.charAt(r.nextInt(combination.length()));
+                    if(Upper.isSelected()){
+                        Upper.setForeground(new Color(57,255,20));
+                        characters+= upper;
+                    }
+                    if(Special.isSelected()){
+                        Special.setForeground(new Color(57,255,20));
+                        characters+= special;
+                    }
+                    if(Num.isSelected()){
+                        Num.setForeground(new Color(57,255,20));
+                        characters+= num;
+                    }
+                    for(int i=0;i<a;i++){
+                        password1[i] = characters.charAt(r.nextInt(characters.length()));
+                        password2[i] = characters.charAt(r.nextInt(characters.length()));
+                        password3[i] = characters.charAt(r.nextInt(characters.length()));
+                    }
+                    result1.setText(Final = new String(password1));
+                    result2.setText(Final = new String(password2));
+                    result3.setText(Final = new String(password3));
+
+                    try{
+                        FileWriter file = new FileWriter("C:\\Users\\jyath\\Documents\\FOCP FInal Proj.txt");
+                        file.write(String.valueOf(password1)+"\n");
+                        file.write(String.valueOf(password2)+"\n");
+                        file.write(String.valueOf(password3)+"\n");
+                        file.close();
+                    }
+                    catch(IOException exception){
+                        result1.setText("File could not be saved");
                     }
 
-                    result.setText(Final = new String(password));
+
                 }
 
             }
 
             catch(NumberFormatException exception){
-                result.setForeground(Color.RED);
-                result.setText("Enter a valid Input");
+                result1.setForeground(Color.RED);
+                result1.setText("Enter a valid Input");
             }
 
         }
